@@ -22,5 +22,4 @@ $>./camel_to_snake "hello_world" | cat -e
 helloWorld$
 $>./camel_to_snake | cat -e
 $
-
 ```

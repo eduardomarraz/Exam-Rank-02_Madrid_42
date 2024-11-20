@@ -1,46 +1,30 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fprime.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gicomlan <gicomlan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/25 11:38:58 by gicomlan          #+#    #+#             */
-/*   Updated: 2024/08/19 16:40:21 by gicomlan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <stdio.h>
+#include <stdlib.h>
 
-#include <stdlib.h> //atoi
-#include <stdio.h> //printf
-
-static void	ft_prime(int number)
+int	main(int argc, char *argv[])
 {
-	static int	prime;
+	int	i;
+	int	number;
 
-	prime = 0x2;
-	if (number == 0x1)
+	if (argc == 2)
 	{
-		printf("1");
-		return ;
-	}
-	while (prime <= number)
-	{
-		if ((number % prime) == 0x0)
+		i = 1;
+		number = atoi(argv[1]);
+		if (number == 1)
+			printf("1");
+		while (number >= ++i)
 		{
-			printf("%d", prime);
-			if (number != prime)
+			if (number % i == 0)
+			{
+				printf("%d", i);
+				if (number == i)
+					break ;
 				printf("*");
-			number /= prime;
+				number /= i;
+				i = 1;
+			}
 		}
-		else
-			prime++;
 	}
-}
-
-int	main(int argc, char **argv)
-{
-	if (argc == 0x2)
-		ft_prime(atoi(argv[0x1]));
 	printf("\n");
-	return (EXIT_SUCCESS);
+	return (0);
 }

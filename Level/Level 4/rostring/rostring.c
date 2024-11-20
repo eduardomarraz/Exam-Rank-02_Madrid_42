@@ -1,69 +1,51 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rostring.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gicomlan <gicomlan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/19 12:58:47 by gicomlan          #+#    #+#             */
-/*   Updated: 2024/08/19 12:58:50 by gicomlan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <unistd.h>
 
-#include <unistd.h> // For write
-
-void	ft_putchar(char c)
+void write_word(char *start, char *end)
 {
-	write(1, &c, 1);
+    while (start < end)
+    {
+        write(1, start, 1);
+        start++;
+    }
 }
 
-int	is_space(char c)
+int main(int argc, char **argv)
 {
-	if ((c == ' ') || (c == '\t'))
-		return (1);
-	return (0);
-}
+    char *str;
+    char *first_word_start;
+    char *first_word_end;
 
-void	ft_print_first_word(char *str, int begin_space)
-{
-	while (str[begin_space] != '\0' && !is_space(str[begin_space]))
-	{
-		ft_putchar(str[begin_space]);
-		begin_space++;
-	}
-}
-
-void	rostring(char *str)
-{
-	int	idx;
-	int	begin_space;
-
-	begin_space = 0;
-	while (str[begin_space] != '\0' && is_space(str[begin_space]))
-		begin_space++;
-	idx = begin_space;
-	while (str[idx] != '\0' && !is_space(str[idx]))
-		idx++;
-	while (str[idx] != '\0')
-	{
-		if (str[idx] != '\0' && !is_space(str[idx]) && is_space(str[idx - 1]))
-		{
-			while (str[idx] != '\0' && !is_space(str[idx]))
-			{
-				ft_putchar(str[idx]);
-				idx++;
-			}
-			ft_putchar(' ');
-		}
-		idx++;
-	}
-	ft_print_first_word(str, begin_space);
-}
-
-int	main(int argc, char **argv)
-{
-	if (argc > 1)
-		rostring(argv[1]);
-	ft_putchar('\n');
-	return (0);
+    if (argc > 1)
+    {
+        str = argv[1];
+        while (*str == ' ' || *str == '\t') 
+            str++;
+        first_word_start = str;
+        while (*str && *str != ' ' && *str != '\t')
+            str++;
+        first_word_end = str;
+        while (*str == ' ' || *str == '\t')
+            str++;
+        if (*str) {
+            while (*str)
+            {
+                if (*str == ' ' || *str == '\t')
+                {
+                    while (*str == ' ' || *str == '\t')
+                        str++;
+                    if (*str)
+                        write(1, " ", 1);
+                } 
+                else 
+                {
+                    write(1, str, 1);
+                    str++;
+                }
+            }
+            write(1, " ", 1);
+        }
+        write_word(first_word_start, first_word_end);
+    }
+    write(1, "\n", 1);
+    return 0;
 }

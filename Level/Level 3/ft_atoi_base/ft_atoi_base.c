@@ -1,94 +1,51 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gicomlan <gicomlan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/25 02:55:04 by gicomlan          #+#    #+#             */
-/*   Updated: 2024/07/25 10:47:44 by gicomlan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <stdio.h>
 
-static int	ft_isdigit(int c)
+char to_lower(char c)
 {
-	return (('0' <= c) && (c <= '9'));
+	if (c >= 'A' && c <= 'Z')
+		return (c + ('a' - 'A'));
+	return (c);
 }
 
-static int	ft_isupper(int c)
+int get_digit(char c, int digits_in_base)
 {
-	return ((c >= 'A') && (c <= 'Z'));
+	int max_digit;
+
+	if (digits_in_base <= 10)
+		max_digit = digits_in_base - 1 + '0';
+	else
+		max_digit = digits_in_base - 10 - 1 + 'a';
+
+	if (c >= '0' && c <= '9' && c <= max_digit)
+		return (c - '0');
+	else if (c >= 'a' && c <= 'f' && c <= max_digit)
+		return (10 + c - 'a');
+	else
+		return (-1);
 }
 
-static int	ft_islower(char c)
+int ft_atoi_base(const char *str, int str_base)
 {
-	return ((c >= 'a') && (c <= 'z'));
-}
+	int result = 0;
+	int sign = 1;
+	int digit;
 
-int	ft_atoi_base(const char *str, int str_base)
-{
-	int	sign;
-	int	result;
+	if (str == NULL || str_base < 2 || str_base > 16)
+		return 0;
 
-	sign = 0x1;
-	result = 0x0;
 	if (*str == '-')
 	{
 		sign = -1;
-		str++;
+		++str;
 	}
+
 	while (*str)
 	{
-		result *= str_base;
-		if (ft_isdigit(*str))
-			result += (*str - '0');
-		else if (ft_isupper(*str))
-			result += (*str - '7');
-		else if (ft_islower(*str))
-			result += (*str - 'W');
-		str++;
+		digit = get_digit(to_lower(*str), str_base);
+		if (digit == -1)
+			break;
+		result = result * str_base + digit;
+		++str;
 	}
 	return (result * sign);
 }
-/*
-#include <stdio.h>
-#include <stdlib.h>
-
-int	main(void)
-{
-	printf("%d\n", ft_atoi_base("A", 16));
-	printf("%d\n", ft_atoi_base("B", 16));
-	printf("%d\n", ft_atoi_base("C", 16));
-	printf("%d\n", ft_atoi_base("D", 16));
-	printf("%d\n", ft_atoi_base("e", 16));
-	printf("%d\n", ft_atoi_base("E", 16));
-	return (EXIT_SUCCESS);
-}
-*/
-// int	ft_atoi_base(const char *str, int str_base)
-// {
-// 	int	idx;
-// 	int	sign;
-// 	int	result;
-
-// 	idx = 0;
-// 	sign = 1;
-// 	result = 0;
-// 	if (str[idx] == '-')
-// 	{
-// 		sign = -1;
-// 		idx++;
-// 	}
-// 	while (str[idx] != '\0')
-// 	{
-// 		result *= str_base;
-// 		if (str[idx] >= '0' && str[idx] <= '9')
-// 			result += str[idx] - '0';
-// 		else if (str[idx] >= 'A' && str[idx] <= 'Z')
-// 			result += str[idx] - '7';
-// 		else if (str[idx] >= 'a' && str[idx] <= 'z')
-// 			result += str[idx] - 'W';
-// 		idx++;
-// 	}
-// 	return (result * sign);
-// }
