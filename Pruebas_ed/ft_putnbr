@@ -1,0 +1,13 @@
+#include <unistd.h>
+
+void ft_putnbr(int nb)
+{
+	char digit;
+
+	if (nb > 10)
+		ft_putnbr(nb / 10);
+	digit = nb % 10 + '0';
+	write (1, &digit, 1);
+}
+
+// Este no entra en el examen es solo para imprimir rapido los numeros con el write
