@@ -3,10 +3,13 @@
 
 char *ft_strncpy(char *s1, char *s2, int n)
 {
-	int i = -1;
+	int i = 0;
 
-	while (++i < n && s2[i])
+	while (i < n && s2[i])
+	{
 		s1[i] = s2[i];
+		i++;
+	}
 	s1[i] = '\0';
 	return (s1);
 }
