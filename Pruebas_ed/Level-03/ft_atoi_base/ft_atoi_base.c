@@ -1,50 +1,51 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: eduamart <eduamart@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 17:52:03 by eduamart          #+#    #+#             */
-/*   Updated: 2024/11/19 18:32:50 by eduamart         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdio.h>
 
-int	ft_atoi_base(const char *str, int str_base)
+char to_lower(char c)
 {
-	int	sign = 1;
-	int	result = 0;
-	
+	if (c >= 'A' && c <= 'Z')
+		return (c + ('a' - 'A'));
+	return (c);
+}
+
+int get_digit(char c, int digits_in_base)
+{
+	int max_digit;
+
+	if (digits_in_base <= 10)
+		max_digit = digits_in_base - 1 + '0';
+	else
+		max_digit = digits_in_base - 10 - 1 + 'a';
+
+	if (c >= '0' && c <= '9' && c <= max_digit)
+		return (c - '0');
+	else if (c >= 'a' && c <= 'f' && c <= max_digit)
+		return (10 + c - 'a');
+	else
+		return (-1);
+}
+
+int ft_atoi_base(const char *str, int str_base)
+{
+	int result = 0;
+	int sign = 1;
+	int digit;
+
+	if (str == NULL || str_base < 2 || str_base > 16)
+		return 0;
+
 	if (*str == '-')
 	{
 		sign = -1;
-		str++;	// por el signo -, por eso suma
+		++str;
 	}
 
 	while (*str)
 	{
-		result *= str_base;
-		if (*str >= '0' && *str <= '9')
-			result += (*str - '0');
-		else if (*str >= 'a' && *str <= 'f')
-			result += (*str - 'a' + 10);
-		else if (*str >= 'A' && *str <= 'F')
-			result += (*str - 'A' + 10);
-		str++;
+		digit = get_digit(to_lower(*str), str_base);
+		if (digit == -1)
+			break;
+		result = result * str_base + digit;
+		++str;
 	}
-
 	return (result * sign);
 }
-
-// int main()
-// {
-// 	// Pruebas con diferentes bases
-// 	printf("Base 10 (123): %d\n", ft_atoi_base("123", 10));  // 123 en base 10
-// 	printf("Base 2 (1011): %d\n", ft_atoi_base("1011", 2));  // 11 en base 10
-// 	printf("Base 16 (1f4): %d\n", ft_atoi_base("1f4", 16));  // 500 en base 10
-// 	printf("Base 8 (17): %d\n", ft_atoi_base("17", 8));  // 15 en base 10
-
-// 	return 0;
-// }
